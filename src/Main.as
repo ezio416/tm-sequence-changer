@@ -1,11 +1,11 @@
 // c 2023-12-26
-// m 2023-12-26
+// m 2023-12-28
 
 bool abort = false;
 CGamePlaygroundUIConfig::EUISequence desiredSequence;
 bool inMap = false;
 bool switching = false;
-string title = Icons::Film + " Sequence Changer";
+string title = Icons::Film + " Sequences";
 
 void RenderMenu() {
     if (UI::BeginMenu(title, inMap)) {
