@@ -43,7 +43,7 @@ void Main() {
             } else
                 CurGameModeStr = "none";
 
-            local = CurGameModeStr.Contains("_Local");
+            local = CurGameModeStr.Contains("_Local") || (App.Editor !is null && App.PlaygroundScript !is null);
         } else
             local = false;
 
