@@ -1,14 +1,15 @@
 // c 2023-12-26
-// m 2023-12-28
+// m 2023-12-29
 
 bool abort = false;
 CGamePlaygroundUIConfig::EUISequence desiredSequence;
-bool inMap = false;
+string CurGameModeStr;
+bool local = false;
 bool switching = false;
 string title = "\\$36D" + Icons::Film + "\\$G Sequences";
 
 void RenderMenu() {
-    if (UI::BeginMenu(title, inMap)) {
+    if (UI::BeginMenu(title, local)) {
         if (UI::MenuItem("\\$F33" + Icons::Times + (switching ? "\\$G" : "\\$888") + " Abort", "", false, switching))
             abort = true;
 
@@ -33,7 +34,19 @@ void Main() {
     CTrackMania@ App = cast<CTrackMania@>(GetApp());
 
     while (true) {
-        inMap = App.RootMap !is null && cast<CSmArenaClient@>(App.CurrentPlayground) !is null;
+        if (App.RootMap !is null && cast<CSmArenaClient@>(App.CurrentPlayground) !is null) {
+            CTrackManiaNetwork@ Network = cast<CTrackManiaNetwork@>(App.Network);
+            if (Network !is null) {
+                CTrackManiaNetworkServerInfo@ ServerInfo = cast<CTrackManiaNetworkServerInfo@>(Network.ServerInfo);
+                if (ServerInfo !is null)
+                    CurGameModeStr = ServerInfo.CurGameModeStr;
+            } else
+                CurGameModeStr = "none";
+
+            local = CurGameModeStr.Contains("_Local");
+        } else
+            local = false;
+
         yield();
     }
 }
